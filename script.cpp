@@ -154,7 +154,45 @@ const char* blockedConsumableNames[] = {
 "CONSUMABLE_VALERIAN_ROOT",
 "CONSUMABLE_WHISKEY",
 "CONSUMABLE_WHISKEY_USED",
+"CONSUMABLE_POISON_TONIC",
+"CONSUMABLE_POTENT_TONIC",
+"CONSUMABLE_SPECIAL_TONIC",
+"CONSUMABLE_TONIC",
+"CONSUMABLE_TONIC_USED",
+"CONSUMABLE_MEDICINE",
+"CONSUMABLE_MEDICINE_USED",
+"CONSUMABLE_POTENT_MEDICINE",
+"CONSUMABLE_POTENT_RESTORATIVE",
+"CONSUMABLE_POTENT_SNAKE_OIL",
+"CONSUMABLE_RESTORATIVE",
+"CONSUMABLE_RESTORATIVE_USED",
+"CONSUMABLE_SNAKE_OIL",
+"CONSUMABLE_SNAKE_OIL_USED",
+"CONSUMABLE_SPECIAL_MEDICINE",
+"CONSUMABLE_SPECIAL_RESTORATIVE",
+"CONSUMABLE_SPECIAL_SNAKE_OIL"
 };
+
+const char* coverUnlockedConsumables[] = {
+"CONSUMABLE_POISON_TONIC",
+"CONSUMABLE_POTENT_TONIC",
+"CONSUMABLE_SPECIAL_TONIC",
+"CONSUMABLE_TONIC",
+"CONSUMABLE_TONIC_USED",
+"CONSUMABLE_MEDICINE",
+"CONSUMABLE_MEDICINE_USED",
+"CONSUMABLE_POTENT_MEDICINE",
+"CONSUMABLE_POTENT_RESTORATIVE",
+"CONSUMABLE_POTENT_SNAKE_OIL",
+"CONSUMABLE_RESTORATIVE",
+"CONSUMABLE_RESTORATIVE_USED",
+"CONSUMABLE_SNAKE_OIL",
+"CONSUMABLE_SNAKE_OIL_USED",
+"CONSUMABLE_SPECIAL_MEDICINE",
+"CONSUMABLE_SPECIAL_RESTORATIVE",
+"CONSUMABLE_SPECIAL_SNAKE_OIL"
+};
+
 const int numBlockedConsumables = sizeof(blockedConsumableNames) / sizeof(const char*);
 
 Hash blockedConsumables[numBlockedConsumables];
@@ -166,6 +204,24 @@ bool IsBlockedConsumable(Hash itemHash) {
         }
     }
     return false;
+}
+
+const int numCoverUnlockedConsumables = sizeof(coverUnlockedConsumables) / sizeof(const char*);
+
+Hash coverUnblockedConsumables[numCoverUnlockedConsumables];
+
+bool IsUnlockedConsumable(Hash itemHash) {
+    for (int i = 0; i < numCoverUnlockedConsumables; ++i) {
+        if (itemHash == coverUnblockedConsumables[i]) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool IsPlayerInCover(Ped playerPed) {
+	bool isInCover = false;
+    return isInCover = PED::IS_PED_IN_COVER(playerPed, true, false);
 }
 
 void InitializeBlockedConsumables() {
@@ -183,16 +239,35 @@ void update() {
 
     bool inCombat = PED::IS_PED_IN_COMBAT(playerPed, 0);
 
-    if (inCombat) {
+    if (inCombat && !IsPlayerInCover(playerPed)) {
+        //lock all consumables
         for (int i = 0; i < numBlockedConsumables; ++i) {
             ITEMS::_0x766315A564594401(playerInventoryID, blockedConsumables[i], reasonDebug);
         }
-
+        //lock stringy meat
         ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
+
+    }
+    else if (inCombat && IsPlayerInCover(playerPed)) {
+		//player is in cover
+
+        //lock all consumables
+        for (int i = 0; i < numBlockedConsumables; ++i) {
+            ITEMS::_0x766315A564594401(playerInventoryID, blockedConsumables[i], reasonDebug);
+        }
+        //lock stringy meat
+        ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
+
+		//unlock medicine and tonics consumables 
+        for (int i = 0; i < numCoverUnlockedConsumables; ++i) {
+            ITEMS::_0x6A564540FAC12211(playerInventoryID, coverUnblockedConsumables[i]);
+        }
 
     }
     else {
         for (int i = 0; i < numBlockedConsumables; ++i) {
+			//out of combat 
+			//unlock all consumables
             ITEMS::_0x6A564540FAC12211(playerInventoryID, blockedConsumables[i]);
         }
     }
@@ -201,7 +276,7 @@ void update() {
 }
 
 void main() {
-    InitializeBlockedConsumables(); 
+    InitializeBlockedConsumables();
 
     while (true) {
         update();
