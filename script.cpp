@@ -173,7 +173,7 @@ const char* blockedConsumableNames[] = {
 "CONSUMABLE_SPECIAL_SNAKE_OIL"
 };
 
-const char* coverUnlockedConsumables[] = {
+const char* unlockedConsumablesNames[] = {
 "CONSUMABLE_POISON_TONIC",
 "CONSUMABLE_POTENT_TONIC",
 "CONSUMABLE_SPECIAL_TONIC",
@@ -206,13 +206,13 @@ bool IsBlockedConsumable(Hash itemHash) {
     return false;
 }
 
-const int numCoverUnlockedConsumables = sizeof(coverUnlockedConsumables) / sizeof(const char*);
+const int numUnlockedConsumables = sizeof(unlockedConsumablesNames) / sizeof(const char*);
 
-Hash coverUnblockedConsumables[numCoverUnlockedConsumables];
+Hash unblockedConsumables[numUnlockedConsumables];
 
 bool IsUnlockedConsumable(Hash itemHash) {
-    for (int i = 0; i < numCoverUnlockedConsumables; ++i) {
-        if (itemHash == coverUnblockedConsumables[i]) {
+    for (int i = 0; i < numUnlockedConsumables; ++i) {
+        if (itemHash == unblockedConsumables[i]) {
             return true;
         }
     }
@@ -227,6 +227,12 @@ bool IsPlayerInCover(Ped playerPed) {
 void InitializeBlockedConsumables() {
     for (int i = 0; i < numBlockedConsumables; ++i) {
         blockedConsumables[i] = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(blockedConsumableNames[i]));
+    }
+}
+
+void InitializeUnlockedConsumables() {
+    for (int i = 0; i < numUnlockedConsumables; ++i) {
+        unblockedConsumables[i] = GAMEPLAY::GET_HASH_KEY(const_cast<char*>(unlockedConsumablesNames[i]));
     }
 }
 
@@ -259,8 +265,8 @@ void update() {
         ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
 
 		//unlock medicine and tonics consumables 
-        for (int i = 0; i < numCoverUnlockedConsumables; ++i) {
-            ITEMS::_0x6A564540FAC12211(playerInventoryID, coverUnblockedConsumables[i]);
+        for (int i = 0; i < numUnlockedConsumables; ++i) {
+            ITEMS::_0x6A564540FAC12211(playerInventoryID, unblockedConsumables[i]);
         }
 
     }
@@ -277,6 +283,7 @@ void update() {
 
 void main() {
     InitializeBlockedConsumables();
+    InitializeUnlockedConsumables();
 
     while (true) {
         update();
