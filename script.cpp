@@ -154,6 +154,11 @@ const char* blockedConsumableNames[] = {
 "CONSUMABLE_VALERIAN_ROOT",
 "CONSUMABLE_WHISKEY",
 "CONSUMABLE_WHISKEY_USED",
+"CONSUMABLE_POISON_TONIC",
+"CONSUMABLE_POTENT_TONIC",
+"CONSUMABLE_SPECIAL_TONIC",
+"CONSUMABLE_TONIC",
+"CONSUMABLE_TONIC_USED"
 };
 const int numBlockedConsumables = sizeof(blockedConsumableNames) / sizeof(const char*);
 
@@ -201,7 +206,7 @@ void update() {
 }
 
 void main() {
-    InitializeBlockedConsumables(); 
+    InitializeBlockedConsumables();
 
     while (true) {
         update();
