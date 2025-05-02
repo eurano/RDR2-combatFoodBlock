@@ -154,6 +154,8 @@ const char* blockedConsumableNames[] = {
 "CONSUMABLE_VALERIAN_ROOT",
 "CONSUMABLE_WHISKEY",
 "CONSUMABLE_WHISKEY_USED",
+"CONSUMABLE_STRING_MEAT_COOKED",
+"PROVISION_STRINGY_MEAT"
 };
 const int numBlockedConsumables = sizeof(blockedConsumableNames) / sizeof(const char*);
 
@@ -187,8 +189,9 @@ void update() {
         for (int i = 0; i < numBlockedConsumables; ++i) {
             ITEMS::_0x766315A564594401(playerInventoryID, blockedConsumables[i], reasonDebug);
         }
-
-        ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
+        
+        //block string meat
+        //ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
 
     }
     else {
