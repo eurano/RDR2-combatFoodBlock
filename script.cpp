@@ -3,6 +3,7 @@
 #include "types.h"
 #include "nativeCaller.h"
 #include "enums.h"
+#include "main.h"
 
 const char* blockedConsumableNames[] = {
 "CONSUMABLE_AGED_PIRATE_RUM",
