@@ -333,7 +333,7 @@ void update() {
             ITEMS::_0x766315A564594401(playerInventoryID, blockedConsumables[i], reasonDebug);
         }
         //lock stringy meat
-        ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
+        //ITEMS::_0x766315A564594401(playerInventoryID, 0xE42857C5, reasonDebug);
 
     }
     else if (inCombat && IsPlayerInCover(playerPed)) {
